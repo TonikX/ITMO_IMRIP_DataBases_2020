@@ -14,6 +14,11 @@
 
 Лабораторная работа и практическая работы №2 выполнются в ErwinDataModeler. 
 
+#### Лекционная часть
+
+[Лекция 1 - построение инофологической модели](https://youtu.be/L_uQeX3zT3I)
+[Построение модели данных (енг)](https://www.credera.com/blog/technology-solutions/data-modeling-explained-in-10-minutes-or-less/)
+
 #### Практическая часть
 
 Текст практической части работы доступен по [ссылке](https://drive.google.com/open?id=1N2g6N2bJltwTU49kebqYgY5Pi9U2p8_t)
