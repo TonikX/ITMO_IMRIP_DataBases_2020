@@ -19,7 +19,7 @@
 
 [Лекция 1 - построение инофологической модели](https://youtu.be/L_uQeX3zT3I)
 
-[Построение модели данных (енг)](https://www.credera.com/blog/technology-solutions/data-modeling-explained-in-10-minutes-or-less/)
+[Построение модели данных (eng)](https://www.credera.com/blog/technology-solutions/data-modeling-explained-in-10-minutes-or-less/)
 
 #### Практическая часть
 
