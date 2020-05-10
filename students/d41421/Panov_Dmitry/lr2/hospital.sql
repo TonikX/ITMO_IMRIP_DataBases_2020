@@ -1,6 +1,27 @@
--- Таблицы создавались и заполнялись в графическом интерфейсе pgadmin4
--- Затем сгенерированный sql-код созданных таблиц оформлен в данный отдельный файл
+-- База дынных, схема и таблицы создавались и заполнялись в графическом интерфейсе pgadmin4
+-- Затем сгенерированный sql-код оформлен в данный отдельный файл
 
+-- Database: hospital
+
+-- DROP DATABASE hospital;
+
+CREATE DATABASE hospital
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+-- SCHEMA: hospitalDB
+
+-- DROP SCHEMA "hospitalDB" ;
+
+CREATE SCHEMA "hospitalDB"
+    AUTHORIZATION postgres;
+	
+-- Создание таблиц
 
 -- Таблица диагнозов
 CREATE TABLE "hospitalDB".diagnoses
