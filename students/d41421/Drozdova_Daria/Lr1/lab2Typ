@@ -1,0 +1,674 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.12
+-- Dumped by pg_dump version 10.12
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: DATABASE "Typograpgy"; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE "Typograpgy" IS 'Данная база данных содержит организационную и финансовую информацию о типографии';
+
+
+--
+-- Name: Typography; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA "Typography";
+
+
+ALTER SCHEMA "Typography" OWNER TO postgres;
+
+--
+-- Name: SCHEMA "Typography"; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA "Typography" IS 'Typography database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: Author; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Author" (
+    author_id numeric NOT NULL,
+    "author_FIO" character(50)
+);
+
+
+ALTER TABLE "Typography"."Author" OWNER TO postgres;
+
+--
+-- Name: TABLE "Author"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Author" IS 'Данные об авторах книг, издающихся в типографии';
+
+
+--
+-- Name: Author_book; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Author_book" (
+    author_id numeric NOT NULL,
+    name character(100) NOT NULL,
+    name_position numeric NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Author_book" OWNER TO postgres;
+
+--
+-- Name: TABLE "Author_book"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Author_book" IS 'Таблица с указанием связи автора и книги';
+
+
+--
+-- Name: Book; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Book" (
+    "Name" character(100) NOT NULL,
+    contract_id numeric,
+    manager_id numeric,
+    num_pages numeric,
+    has_pictures boolean
+);
+
+
+ALTER TABLE "Typography"."Book" OWNER TO postgres;
+
+--
+-- Name: TABLE "Book"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Book" IS 'Таблица содержит информацию о книгах, издающихся в типографии';
+
+
+--
+-- Name: Order; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Order" (
+    order_id numeric NOT NULL,
+    buyer_id numeric NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Order" OWNER TO postgres;
+
+--
+-- Name: TABLE "Order"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Order" IS 'Таблица содержит информацию о заказе';
+
+
+--
+-- Name: Book_order; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Book_order" (
+    book_name character(100) NOT NULL,
+    number numeric NOT NULL
+)
+INHERITS ("Typography"."Order");
+
+
+ALTER TABLE "Typography"."Book_order" OWNER TO postgres;
+
+--
+-- Name: TABLE "Book_order"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Book_order" IS 'Таблица содержит информацию о каждой книге в конкретном заказе';
+
+
+--
+-- Name: Buyer; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Buyer" (
+    "buyer_FIO" character(50) NOT NULL,
+    buyer_id numeric NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Buyer" OWNER TO postgres;
+
+--
+-- Name: Contract; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Contract" (
+    contract_id numeric NOT NULL,
+    contract_date date,
+    manager_id numeric NOT NULL,
+    author_id numeric NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Contract" OWNER TO postgres;
+
+--
+-- Name: TABLE "Contract"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Contract" IS 'Данная таблица содержит информацию о контрактах типографии';
+
+
+--
+-- Name: Editing; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Editing" (
+    "Book_name" character(100) NOT NULL,
+    "Editors" numeric[] NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Editing" OWNER TO postgres;
+
+--
+-- Name: TABLE "Editing"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Editing" IS 'Вспомогательная таблица "Редактирование", содержит информацию о том, какие редакторы редактируют книгу';
+
+
+--
+-- Name: Worker; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Worker" (
+    "worker_ID" numeric NOT NULL,
+    "worker_FIO" character(50),
+    occupation character(20)
+);
+
+
+ALTER TABLE "Typography"."Worker" OWNER TO postgres;
+
+--
+-- Name: TABLE "Worker"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Worker" IS 'Данная таблица содержит данные о сотрудниках типографии';
+
+
+--
+-- Name: Editor; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Editor" (
+)
+INHERITS ("Typography"."Worker");
+
+
+ALTER TABLE "Typography"."Editor" OWNER TO postgres;
+
+--
+-- Name: TABLE "Editor"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Editor" IS 'Данная таблица содержит информацию о редакторах типографии';
+
+
+--
+-- Name: Editor_book; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Editor_book" (
+    name character(100) NOT NULL,
+    editor_in_charge_id numeric NOT NULL
+);
+
+
+ALTER TABLE "Typography"."Editor_book" OWNER TO postgres;
+
+--
+-- Name: Manager; Type: TABLE; Schema: Typography; Owner: postgres
+--
+
+CREATE TABLE "Typography"."Manager" (
+)
+INHERITS ("Typography"."Worker");
+
+
+ALTER TABLE "Typography"."Manager" OWNER TO postgres;
+
+--
+-- Name: TABLE "Manager"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON TABLE "Typography"."Manager" IS 'Данная таблица содержит информацию о менеджерах типографии';
+
+
+--
+-- Data for Name: Author; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Author" (author_id, "author_FIO") FROM stdin;
+1	George Drozdov                                    
+2	George Ivanov                                     
+3	Marina Kholodova                                  
+4	Julia Kirillova                                   
+5	Polina Koc                                        
+\.
+
+
+--
+-- Data for Name: Author_book; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Author_book" (author_id, name, name_position) FROM stdin;
+1	Harry Potter part 1                                                                                 	1
+2	Harry Potter part 2                                                                                 	1
+3	Harry Potter part 3                                                                                 	1
+4	Harry Potter part 4                                                                                 	1
+5	Harry Potter part 4                                                                                 	2
+5	Harry Potter part 5                                                                                 	1
+\.
+
+
+--
+-- Data for Name: Book; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Book" ("Name", contract_id, manager_id, num_pages, has_pictures) FROM stdin;
+Harry Potter part 1                                                                                 	1	1	300	t
+Harry Potter part 2                                                                                 	2	4	300	f
+Harry Potter part 3                                                                                 	3	4	300	f
+Harry Potter part 4                                                                                 	4	1	300	t
+Harry Potter part 5                                                                                 	5	4	301	f
+\.
+
+
+--
+-- Data for Name: Book_order; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Book_order" (order_id, buyer_id, book_name, number) FROM stdin;
+1	2	Harry Potter part 4                                                                                 	2
+2	2	Harry Potter part 1                                                                                 	1
+3	4	Harry Potter part 5                                                                                 	1
+4	2	Harry Potter part 3                                                                                 	100
+4	2	Harry Potter part 2                                                                                 	100
+\.
+
+
+--
+-- Data for Name: Buyer; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Buyer" ("buyer_FIO", buyer_id) FROM stdin;
+Paul Glister                                      	1
+Jean Anders                                       	2
+Kate Miller                                       	3
+Hebrey Milton                                     	4
+Alice Springsteen                                 	5
+\.
+
+
+--
+-- Data for Name: Contract; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Contract" (contract_id, contract_date, manager_id, author_id) FROM stdin;
+1	2020-05-11	1	1
+2	2020-04-11	4	3
+3	2020-04-29	4	4
+4	2019-05-29	1	5
+5	2018-11-29	4	2
+\.
+
+
+--
+-- Data for Name: Editing; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Editing" ("Book_name", "Editors") FROM stdin;
+Harry Potter part 1                                                                                 	{2,3}
+Harry Potter part 2                                                                                 	{2,3,5}
+Harry Potter part 3                                                                                 	{3,5}
+Harry Potter part 4                                                                                 	{3}
+Harry Potter part 5                                                                                 	{2,5}
+\.
+
+
+--
+-- Data for Name: Editor; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Editor" ("worker_ID", "worker_FIO", occupation) FROM stdin;
+2	Irina Panfilova                                   	editor              
+3	Polina Kirillova                                  	editor              
+5	Boris Kopitov                                     	editor              
+\.
+
+
+--
+-- Data for Name: Editor_book; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Editor_book" (name, editor_in_charge_id) FROM stdin;
+Harry Potter part 1                                                                                 	2
+Harry Potter part 2                                                                                 	3
+Harry Potter part 3                                                                                 	5
+Harry Potter part 4                                                                                 	3
+Harry Potter part 5                                                                                 	5
+\.
+
+
+--
+-- Data for Name: Manager; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Manager" ("worker_ID", "worker_FIO", occupation) FROM stdin;
+1	Andrey Glagoliev                                  	manager             
+4	Sarah Miller                                      	manager             
+\.
+
+
+--
+-- Data for Name: Order; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Order" (order_id, buyer_id) FROM stdin;
+1	1
+2	2
+3	2
+4	4
+5	5
+\.
+
+
+--
+-- Data for Name: Worker; Type: TABLE DATA; Schema: Typography; Owner: postgres
+--
+
+COPY "Typography"."Worker" ("worker_ID", "worker_FIO", occupation) FROM stdin;
+1	Andrey Glagoliev                                  	manager             
+2	Irina Panfilova                                   	editor              
+3	Polina Kirillova                                  	editor              
+4	Sarah Miller                                      	manager             
+5	Boris Kopitov                                     	editor              
+\.
+
+
+--
+-- Name: Book_order Book_order_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Book_order"
+    ADD CONSTRAINT "Book_order_pkey" PRIMARY KEY (book_name);
+
+
+--
+-- Name: Book Book_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Book"
+    ADD CONSTRAINT "Book_pkey" PRIMARY KEY ("Name");
+
+
+--
+-- Name: Buyer Buyer_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Buyer"
+    ADD CONSTRAINT "Buyer_pkey" PRIMARY KEY (buyer_id);
+
+
+--
+-- Name: Editing Editing_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editing"
+    ADD CONSTRAINT "Editing_pkey" PRIMARY KEY ("Book_name", "Editors");
+
+
+--
+-- Name: Editor_book Editor_book_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor_book"
+    ADD CONSTRAINT "Editor_book_pkey" PRIMARY KEY (name);
+
+
+--
+-- Name: Editor Editor_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor"
+    ADD CONSTRAINT "Editor_pkey" PRIMARY KEY ("worker_ID");
+
+
+--
+-- Name: Order Order id; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Order"
+    ADD CONSTRAINT "Order id" UNIQUE (order_id);
+
+
+--
+-- Name: Order Order_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Order"
+    ADD CONSTRAINT "Order_pkey" PRIMARY KEY (order_id);
+
+
+--
+-- Name: Author authoer unique number; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Author"
+    ADD CONSTRAINT "authoer unique number" PRIMARY KEY (author_id);
+
+
+--
+-- Name: Buyer buyer unique number; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Buyer"
+    ADD CONSTRAINT "buyer unique number" UNIQUE (buyer_id);
+
+
+--
+-- Name: Contract contract uniqie number; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Contract"
+    ADD CONSTRAINT "contract uniqie number" UNIQUE (contract_id);
+
+
+--
+-- Name: Editor worker ID; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor"
+    ADD CONSTRAINT "worker ID" UNIQUE ("worker_ID");
+
+
+--
+-- Name: Worker worker_ID; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Worker"
+    ADD CONSTRAINT "worker_ID" UNIQUE ("worker_ID");
+
+
+--
+-- Name: Author_book Автор_книга_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Author_book"
+    ADD CONSTRAINT "Автор_книга_pkey" PRIMARY KEY (author_id, name);
+
+
+--
+-- Name: Contract Контракт_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Contract"
+    ADD CONSTRAINT "Контракт_pkey" PRIMARY KEY (contract_id);
+
+
+--
+-- Name: Manager Менеджер_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Manager"
+    ADD CONSTRAINT "Менеджер_pkey" PRIMARY KEY ("worker_ID");
+
+
+--
+-- Name: Worker Сотрудник_pkey; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Worker"
+    ADD CONSTRAINT "Сотрудник_pkey" PRIMARY KEY ("worker_ID");
+
+
+--
+-- Name: Author УникН автора; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Author"
+    ADD CONSTRAINT "УникН автора" UNIQUE (author_id);
+
+
+--
+-- Name: CONSTRAINT "УникН автора" ON "Author"; Type: COMMENT; Schema: Typography; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT "УникН автора" ON "Typography"."Author" IS 'Уникальный номер автора';
+
+
+--
+-- Name: Manager Уникальный номер; Type: CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Manager"
+    ADD CONSTRAINT "Уникальный номер" UNIQUE ("worker_ID");
+
+
+--
+-- Name: Editor Editor id; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor"
+    ADD CONSTRAINT "Editor id" FOREIGN KEY ("worker_ID") REFERENCES "Typography"."Worker"("worker_ID") NOT VALID;
+
+
+--
+-- Name: Editor_book editor in charge id; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor_book"
+    ADD CONSTRAINT "editor in charge id" FOREIGN KEY (editor_in_charge_id) REFERENCES "Typography"."Editor"("worker_ID") NOT VALID;
+
+
+--
+-- Name: Author_book Название книги; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Author_book"
+    ADD CONSTRAINT "Название книги" FOREIGN KEY (name) REFERENCES "Typography"."Book"("Name") NOT VALID;
+
+
+--
+-- Name: Editor_book Название книги; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editor_book"
+    ADD CONSTRAINT "Название книги" FOREIGN KEY (name) REFERENCES "Typography"."Book"("Name") NOT VALID;
+
+
+--
+-- Name: Editing Название книги; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Editing"
+    ADD CONSTRAINT "Название книги" FOREIGN KEY ("Book_name") REFERENCES "Typography"."Book"("Name") NOT VALID;
+
+
+--
+-- Name: Book_order Название книги; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Book_order"
+    ADD CONSTRAINT "Название книги" FOREIGN KEY (book_name) REFERENCES "Typography"."Book"("Name") NOT VALID;
+
+
+--
+-- Name: Contract УН автора; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Contract"
+    ADD CONSTRAINT "УН автора" FOREIGN KEY (author_id) REFERENCES "Typography"."Author"(author_id) NOT VALID;
+
+
+--
+-- Name: Book УН контракта; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Book"
+    ADD CONSTRAINT "УН контракта" FOREIGN KEY (contract_id) REFERENCES "Typography"."Contract"(contract_id);
+
+
+--
+-- Name: Book УН менеджера; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Book"
+    ADD CONSTRAINT "УН менеджера" FOREIGN KEY (manager_id) REFERENCES "Typography"."Manager"("worker_ID");
+
+
+--
+-- Name: Contract УН сотрудника; Type: FK CONSTRAINT; Schema: Typography; Owner: postgres
+--
+
+ALTER TABLE ONLY "Typography"."Contract"
+    ADD CONSTRAINT "УН сотрудника" FOREIGN KEY (manager_id) REFERENCES "Typography"."Worker"("worker_ID") NOT VALID;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
