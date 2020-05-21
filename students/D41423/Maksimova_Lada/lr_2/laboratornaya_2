@@ -1,0 +1,565 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.7
+-- Dumped by pg_dump version 11.7
+
+-- Started on 2020-05-12 20:24:49
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2869 (class 1262 OID 13012)
+-- Name: postgres; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
+
+
+ALTER DATABASE postgres OWNER TO postgres;
+
+\connect postgres
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2870 (class 0 OID 0)
+-- Dependencies: 2869
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- TOC entry 8 (class 2615 OID 16544)
+-- Name: chicken_factory; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA chicken_factory;
+
+
+ALTER SCHEMA chicken_factory OWNER TO postgres;
+
+--
+-- TOC entry 2871 (class 0 OID 0)
+-- Dependencies: 8
+-- Name: SCHEMA chicken_factory; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA chicken_factory IS 'база данных птицефабрики';
+
+
+--
+-- TOC entry 1 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2872 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 200 (class 1259 OID 16563)
+-- Name: breed; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.breed (
+    breed_name character varying(30) NOT NULL,
+    av_weight numeric NOT NULL,
+    av_productivtiy numeric NOT NULL,
+    diet integer NOT NULL
+);
+
+
+ALTER TABLE chicken_factory.breed OWNER TO postgres;
+
+--
+-- TOC entry 2873 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: TABLE breed; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.breed IS 'таблица содержит данные о породе: название, средние вес и продуктивность, диета применяемая для породы';
+
+
+--
+-- TOC entry 198 (class 1259 OID 16550)
+-- Name: cell; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.cell (
+    cell_id integer NOT NULL,
+    zeh integer NOT NULL,
+    "row" integer NOT NULL,
+    number_in_row integer NOT NULL
+);
+
+
+ALTER TABLE chicken_factory.cell OWNER TO postgres;
+
+--
+-- TOC entry 2874 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: TABLE cell; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.cell IS 'таблица содержит данные о клетках на птицефабрике';
+
+
+--
+-- TOC entry 199 (class 1259 OID 16555)
+-- Name: chicken; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.chicken (
+    chicken_id integer NOT NULL,
+    breed character varying(30) NOT NULL,
+    weight numeric NOT NULL,
+    birth_date date NOT NULL,
+    productivity numeric,
+    cell integer NOT NULL
+);
+
+
+ALTER TABLE chicken_factory.chicken OWNER TO postgres;
+
+--
+-- TOC entry 2875 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: TABLE chicken; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.chicken IS 'таблица содержит данные о курицах на птицефабрике: индивидуальный номер, порода, вес, продуктивность(кол-во яиц), дата "рождения", данные о клетке ';
+
+
+--
+-- TOC entry 201 (class 1259 OID 16571)
+-- Name: diet; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.diet (
+    diet_id integer NOT NULL,
+    description character varying(100) NOT NULL
+);
+
+
+ALTER TABLE chicken_factory.diet OWNER TO postgres;
+
+--
+-- TOC entry 2876 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: TABLE diet; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.diet IS 'содержит данные о диете: номер и описание';
+
+
+--
+-- TOC entry 202 (class 1259 OID 16576)
+-- Name: employee; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.employee (
+    employee_id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    passport character varying(10) NOT NULL,
+    contract integer NOT NULL,
+    fired boolean
+);
+
+
+ALTER TABLE chicken_factory.employee OWNER TO postgres;
+
+--
+-- TOC entry 2877 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: TABLE employee; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.employee IS 'содержит данные о сотрудниках птицефабрики: табельный номер, фио, номер паспорта, номер договора,  статус(уволен/нет)';
+
+
+--
+-- TOC entry 203 (class 1259 OID 16581)
+-- Name: maintenance; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.maintenance (
+    employee integer,
+    cell integer,
+    maitenance_id integer NOT NULL
+);
+
+
+ALTER TABLE chicken_factory.maintenance OWNER TO postgres;
+
+--
+-- TOC entry 2878 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: TABLE maintenance; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON TABLE chicken_factory.maintenance IS 'содержит данные о том, какие сотрудники какие клетки обслуживают';
+
+
+--
+-- TOC entry 197 (class 1259 OID 16545)
+-- Name: zeh; Type: TABLE; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE TABLE chicken_factory.zeh (
+    zeh_id integer NOT NULL,
+    zeh_description character varying(100)
+);
+
+
+ALTER TABLE chicken_factory.zeh OWNER TO postgres;
+
+--
+-- TOC entry 2860 (class 0 OID 16563)
+-- Dependencies: 200
+-- Data for Name: breed; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.breed (breed_name, av_weight, av_productivtiy, diet) VALUES ('русская белая', 3.5, 28.4, 1);
+INSERT INTO chicken_factory.breed (breed_name, av_weight, av_productivtiy, diet) VALUES ('голландская', 3.4, 29.1, 2);
+INSERT INTO chicken_factory.breed (breed_name, av_weight, av_productivtiy, diet) VALUES ('хайсек уайт', 3.3, 28.7, 1);
+INSERT INTO chicken_factory.breed (breed_name, av_weight, av_productivtiy, diet) VALUES ('хайсек браун', 3.6, 30.2, 3);
+INSERT INTO chicken_factory.breed (breed_name, av_weight, av_productivtiy, diet) VALUES ('андалузская голубая', 3.1, 29.6, 4);
+
+
+--
+-- TOC entry 2858 (class 0 OID 16550)
+-- Dependencies: 198
+-- Data for Name: cell; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.cell (cell_id, zeh, "row", number_in_row) VALUES (121, 1, 2, 1);
+INSERT INTO chicken_factory.cell (cell_id, zeh, "row", number_in_row) VALUES (221, 2, 2, 1);
+INSERT INTO chicken_factory.cell (cell_id, zeh, "row", number_in_row) VALUES (222, 2, 2, 2);
+INSERT INTO chicken_factory.cell (cell_id, zeh, "row", number_in_row) VALUES (223, 2, 2, 3);
+INSERT INTO chicken_factory.cell (cell_id, zeh, "row", number_in_row) VALUES (321, 3, 2, 1);
+
+
+--
+-- TOC entry 2859 (class 0 OID 16555)
+-- Dependencies: 199
+-- Data for Name: chicken; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.chicken (chicken_id, breed, weight, birth_date, productivity, cell) VALUES (1, 'андалузская голубая', 3.4, '2018-01-20', 29, 121);
+INSERT INTO chicken_factory.chicken (chicken_id, breed, weight, birth_date, productivity, cell) VALUES (2, 'русская белая', 4.1, '2018-01-21', 28, 121);
+INSERT INTO chicken_factory.chicken (chicken_id, breed, weight, birth_date, productivity, cell) VALUES (3, 'хайсек уайт', 2.9, '2018-01-22', 28, 221);
+INSERT INTO chicken_factory.chicken (chicken_id, breed, weight, birth_date, productivity, cell) VALUES (4, 'русская белая', 3.7, '2018-01-28', 30, 221);
+INSERT INTO chicken_factory.chicken (chicken_id, breed, weight, birth_date, productivity, cell) VALUES (5, 'хайсек браун', 3.1, '2018-01-28', 26, 321);
+
+
+--
+-- TOC entry 2861 (class 0 OID 16571)
+-- Dependencies: 201
+-- Data for Name: diet; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.diet (diet_id, description) VALUES (1, 'кормовая смесь из кукурузы и ячменя');
+INSERT INTO chicken_factory.diet (diet_id, description) VALUES (2, 'кормовая смесь из пшена и бобовых');
+INSERT INTO chicken_factory.diet (diet_id, description) VALUES (3, 'кормовая смесь из пшеничных отрубей и гороха');
+INSERT INTO chicken_factory.diet (diet_id, description) VALUES (4, 'кормовая смесь на основе травяной муки и отрубей');
+INSERT INTO chicken_factory.diet (diet_id, description) VALUES (5, 'кормовая смесь на основе гречихи и пшеничной муки');
+
+
+--
+-- TOC entry 2862 (class 0 OID 16576)
+-- Dependencies: 202
+-- Data for Name: employee; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.employee (employee_id, name, passport, contract, fired) VALUES (1, 'Иванов Пётр Константинович', '1234544955', 3454, false);
+INSERT INTO chicken_factory.employee (employee_id, name, passport, contract, fired) VALUES (2, 'Власова Василиса Ивановна', '9812345671', 3455, false);
+INSERT INTO chicken_factory.employee (employee_id, name, passport, contract, fired) VALUES (3, 'Курочкина Александра Альбертовна', '1210341011', 3456, false);
+INSERT INTO chicken_factory.employee (employee_id, name, passport, contract, fired) VALUES (4, 'Лужин Аркадий Олегович', '1510567897', 3457, false);
+INSERT INTO chicken_factory.employee (employee_id, name, passport, contract, fired) VALUES (5, 'Копейкина Мария Львовна', '4508435367', 3458, false);
+
+
+--
+-- TOC entry 2863 (class 0 OID 16581)
+-- Dependencies: 203
+-- Data for Name: maintenance; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.maintenance (employee, cell, maitenance_id) VALUES (1, 121, 1);
+INSERT INTO chicken_factory.maintenance (employee, cell, maitenance_id) VALUES (3, 221, 2);
+INSERT INTO chicken_factory.maintenance (employee, cell, maitenance_id) VALUES (3, 222, 3);
+INSERT INTO chicken_factory.maintenance (employee, cell, maitenance_id) VALUES (3, 223, 4);
+INSERT INTO chicken_factory.maintenance (employee, cell, maitenance_id) VALUES (2, 321, 5);
+
+
+--
+-- TOC entry 2857 (class 0 OID 16545)
+-- Dependencies: 197
+-- Data for Name: zeh; Type: TABLE DATA; Schema: chicken_factory; Owner: postgres
+--
+
+INSERT INTO chicken_factory.zeh (zeh_id, zeh_description) VALUES (1, 'цех номер один в восточном крыле');
+INSERT INTO chicken_factory.zeh (zeh_id, zeh_description) VALUES (2, 'цех номер два в восточном крыле');
+INSERT INTO chicken_factory.zeh (zeh_id, zeh_description) VALUES (3, 'цех в северном крыле');
+INSERT INTO chicken_factory.zeh (zeh_id, zeh_description) VALUES (4, 'цех в западном крыле');
+INSERT INTO chicken_factory.zeh (zeh_id, zeh_description) VALUES (5, 'цех в южном крыле');
+
+
+--
+-- TOC entry 2720 (class 2606 OID 16570)
+-- Name: breed breed_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.breed
+    ADD CONSTRAINT breed_pkey PRIMARY KEY (breed_name);
+
+
+--
+-- TOC entry 2713 (class 2606 OID 16554)
+-- Name: cell cell_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.cell
+    ADD CONSTRAINT cell_pkey PRIMARY KEY (cell_id);
+
+
+--
+-- TOC entry 2716 (class 2606 OID 16562)
+-- Name: chicken chicken_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.chicken
+    ADD CONSTRAINT chicken_pkey PRIMARY KEY (chicken_id);
+
+
+--
+-- TOC entry 2723 (class 2606 OID 16575)
+-- Name: diet diet_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.diet
+    ADD CONSTRAINT diet_pkey PRIMARY KEY (diet_id);
+
+
+--
+-- TOC entry 2725 (class 2606 OID 16580)
+-- Name: employee employee_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.employee
+    ADD CONSTRAINT employee_pkey PRIMARY KEY (employee_id);
+
+
+--
+-- TOC entry 2729 (class 2606 OID 16621)
+-- Name: maintenance maintenance_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.maintenance
+    ADD CONSTRAINT maintenance_pkey PRIMARY KEY (maitenance_id);
+
+
+--
+-- TOC entry 2711 (class 2606 OID 16549)
+-- Name: zeh zeh_pkey; Type: CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.zeh
+    ADD CONSTRAINT zeh_pkey PRIMARY KEY (zeh_id);
+
+
+--
+-- TOC entry 2717 (class 1259 OID 16607)
+-- Name: fki_breed_to_chicken; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_breed_to_chicken ON chicken_factory.chicken USING btree (breed);
+
+
+--
+-- TOC entry 2718 (class 1259 OID 16601)
+-- Name: fki_cell_to_chicken; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_cell_to_chicken ON chicken_factory.chicken USING btree (cell);
+
+
+--
+-- TOC entry 2726 (class 1259 OID 16619)
+-- Name: fki_cell_to_maintenance; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_cell_to_maintenance ON chicken_factory.maintenance USING btree (cell);
+
+
+--
+-- TOC entry 2721 (class 1259 OID 16589)
+-- Name: fki_diet_to_breed; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_diet_to_breed ON chicken_factory.breed USING btree (diet);
+
+
+--
+-- TOC entry 2727 (class 1259 OID 16613)
+-- Name: fki_emp_to_maintenance; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_emp_to_maintenance ON chicken_factory.maintenance USING btree (employee);
+
+
+--
+-- TOC entry 2714 (class 1259 OID 16595)
+-- Name: fki_zeh_to_cell; Type: INDEX; Schema: chicken_factory; Owner: postgres
+--
+
+CREATE INDEX fki_zeh_to_cell ON chicken_factory.cell USING btree (zeh);
+
+
+--
+-- TOC entry 2732 (class 2606 OID 16602)
+-- Name: chicken breed_to_chicken; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.chicken
+    ADD CONSTRAINT breed_to_chicken FOREIGN KEY (breed) REFERENCES chicken_factory.breed(breed_name) NOT VALID;
+
+
+--
+-- TOC entry 2879 (class 0 OID 0)
+-- Dependencies: 2732
+-- Name: CONSTRAINT breed_to_chicken ON chicken; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT breed_to_chicken ON chicken_factory.chicken IS 'к какой породе относится курица';
+
+
+--
+-- TOC entry 2731 (class 2606 OID 16596)
+-- Name: chicken cell_to_chicken; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.chicken
+    ADD CONSTRAINT cell_to_chicken FOREIGN KEY (cell) REFERENCES chicken_factory.cell(cell_id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- TOC entry 2880 (class 0 OID 0)
+-- Dependencies: 2731
+-- Name: CONSTRAINT cell_to_chicken ON chicken; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT cell_to_chicken ON chicken_factory.chicken IS 'в какой клетке размещается курица';
+
+
+--
+-- TOC entry 2734 (class 2606 OID 16614)
+-- Name: maintenance cell_to_maintenance; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.maintenance
+    ADD CONSTRAINT cell_to_maintenance FOREIGN KEY (cell) REFERENCES chicken_factory.cell(cell_id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- TOC entry 2881 (class 0 OID 0)
+-- Dependencies: 2734
+-- Name: CONSTRAINT cell_to_maintenance ON maintenance; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT cell_to_maintenance ON chicken_factory.maintenance IS 'какую клетку обслуживает сотрудник';
+
+
+--
+-- TOC entry 2733 (class 2606 OID 16584)
+-- Name: breed diet_to_breed; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.breed
+    ADD CONSTRAINT diet_to_breed FOREIGN KEY (diet) REFERENCES chicken_factory.diet(diet_id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- TOC entry 2882 (class 0 OID 0)
+-- Dependencies: 2733
+-- Name: CONSTRAINT diet_to_breed ON breed; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT diet_to_breed ON chicken_factory.breed IS 'какая диета используется для породы';
+
+
+--
+-- TOC entry 2735 (class 2606 OID 16622)
+-- Name: maintenance employee_to_maintenance; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.maintenance
+    ADD CONSTRAINT employee_to_maintenance FOREIGN KEY (employee) REFERENCES chicken_factory.employee(employee_id) NOT VALID;
+
+
+--
+-- TOC entry 2883 (class 0 OID 0)
+-- Dependencies: 2735
+-- Name: CONSTRAINT employee_to_maintenance ON maintenance; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT employee_to_maintenance ON chicken_factory.maintenance IS 'какой сотрудник обслуживает клетку';
+
+
+--
+-- TOC entry 2730 (class 2606 OID 16590)
+-- Name: cell zeh_to_cell; Type: FK CONSTRAINT; Schema: chicken_factory; Owner: postgres
+--
+
+ALTER TABLE ONLY chicken_factory.cell
+    ADD CONSTRAINT zeh_to_cell FOREIGN KEY (zeh) REFERENCES chicken_factory.zeh(zeh_id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- TOC entry 2884 (class 0 OID 0)
+-- Dependencies: 2730
+-- Name: CONSTRAINT zeh_to_cell ON cell; Type: COMMENT; Schema: chicken_factory; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT zeh_to_cell ON chicken_factory.cell IS 'в каком цеху находится клетка';
+
+
+-- Completed on 2020-05-12 20:24:49
+
+--
+-- PostgreSQL database dump complete
+--
+
