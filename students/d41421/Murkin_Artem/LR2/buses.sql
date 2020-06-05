@@ -5,7 +5,7 @@
 -- Dumped from database version 12.2
 -- Dumped by pg_dump version 12.2
 
--- Started on 2020-05-11 19:22:02
+-- Started on 2020-06-05 23:39:42
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -106,7 +106,7 @@ COMMENT ON TABLE bus_bd_schema.bus_types IS 'Таблица с информац�
 --
 
 CREATE TABLE bus_bd_schema.buses (
-    bus_number character(8) NOT NULL,
+    license_plate character(8) NOT NULL,
     route_number integer NOT NULL,
     bus_type character(10) NOT NULL
 );
@@ -138,7 +138,7 @@ CREATE TABLE bus_bd_schema.drivers (
     rank character(10) NOT NULL,
     experience integer NOT NULL,
     route_number integer,
-    bus_number character(8)
+    license_plate character(8)
 );
 
 
@@ -160,7 +160,7 @@ COMMENT ON TABLE bus_bd_schema.drivers IS 'Таблица с информаци�
 
 CREATE TABLE bus_bd_schema.malfunctions (
     malfunction_date date NOT NULL,
-    bus_number character(8) NOT NULL,
+    license_plate character(8) NOT NULL,
     malfunction_cause character(20) NOT NULL
 );
 
@@ -188,7 +188,7 @@ CREATE TABLE bus_bd_schema.routes (
     start_time time without time zone NOT NULL,
     end_time time without time zone NOT NULL,
     "interval" integer NOT NULL,
-    length integer NOT NULL
+    route_length integer NOT NULL
 );
 
 
@@ -282,11 +282,11 @@ INSERT INTO bus_bd_schema.bus_types (bus_type, capacity) VALUES ('minibus   ', 2
 -- Data for Name: buses; Type: TABLE DATA; Schema: bus_bd_schema; Owner: postgres
 --
 
-INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('а213бг78', 7, 'doubledeck');
-INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('б114де78', 31, 'singledeck');
-INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('у664он78', 124, 'minibus   ');
-INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('о741ии78', 12, 'middlebend');
-INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('а339ол78', 15, 'trolleybus');
+INSERT INTO bus_bd_schema.buses (license_plate, route_number, bus_type) VALUES ('а213бг78', 7, 'doubledeck');
+INSERT INTO bus_bd_schema.buses (license_plate, route_number, bus_type) VALUES ('б114де78', 31, 'singledeck');
+INSERT INTO bus_bd_schema.buses (license_plate, route_number, bus_type) VALUES ('у664он78', 124, 'minibus   ');
+INSERT INTO bus_bd_schema.buses (license_plate, route_number, bus_type) VALUES ('о741ии78', 12, 'middlebend');
+INSERT INTO bus_bd_schema.buses (license_plate, route_number, bus_type) VALUES ('а339ол78', 15, 'trolleybus');
 
 
 --
@@ -295,11 +295,11 @@ INSERT INTO bus_bd_schema.buses (bus_number, route_number, bus_type) VALUES ('а
 -- Data for Name: drivers; Type: TABLE DATA; Schema: bus_bd_schema; Owner: postgres
 --
 
-INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, bus_number) VALUES (38, 1, 'Сергеев Иван Владимирович', 'm', 5006123456, '5/2       ', 'first     ', 10, 7, 'а213бг78');
-INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, bus_number) VALUES (42, 2, 'Фёдоров Роман Алексеевич', 'm', 4975124563, '5/2       ', 'second    ', 20, 124, 'у664он78');
-INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, bus_number) VALUES (56, 3, 'Петров Николай Николаевич', 'm', 4612357951, '3/1       ', 'first     ', 20, 12, 'о741ии78');
-INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, bus_number) VALUES (60, 4, 'Иванов Максим Петрович', 'm', 4217852761, '5/2       ', 'third     ', 20, 31, 'б114де78');
-INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, bus_number) VALUES (46, 5, 'Трофимова Ольга Игоревна', 'f', 4862842605, '3/1       ', 'second    ', 10, 15, 'а339ол78');
+INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, license_plate) VALUES (38, 1, 'Сергеев Иван Владимирович', 'm', 5006123456, '5/2       ', 'first     ', 10, 7, 'а213бг78');
+INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, license_plate) VALUES (42, 2, 'Фёдоров Роман Алексеевич', 'm', 4975124563, '5/2       ', 'second    ', 20, 124, 'у664он78');
+INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, license_plate) VALUES (56, 3, 'Петров Николай Николаевич', 'm', 4612357951, '3/1       ', 'first     ', 20, 12, 'о741ии78');
+INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, license_plate) VALUES (60, 4, 'Иванов Максим Петрович', 'm', 4217852761, '5/2       ', 'third     ', 20, 31, 'б114де78');
+INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_sex, passport_number, shift_schedule, rank, experience, route_number, license_plate) VALUES (46, 5, 'Трофимова Ольга Игоревна', 'f', 4862842605, '3/1       ', 'second    ', 10, 15, 'а339ол78');
 
 
 --
@@ -308,11 +308,11 @@ INSERT INTO bus_bd_schema.drivers (driver_age, driver_id, driver_name, driver_se
 -- Data for Name: malfunctions; Type: TABLE DATA; Schema: bus_bd_schema; Owner: postgres
 --
 
-INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunction_cause) VALUES ('2019-10-16', 'у664он78', 'поломка аккумулятора');
-INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunction_cause) VALUES ('2019-10-28', 'б114де78', 'поломка аккумулятора');
-INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunction_cause) VALUES ('2019-11-10', 'а213бг78', 'поломка генератора  ');
-INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunction_cause) VALUES ('2019-11-29', 'а339ол78', 'поломка стартера    ');
-INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunction_cause) VALUES ('2019-12-18', 'у664он78', 'поломка аккумулятора');
+INSERT INTO bus_bd_schema.malfunctions (malfunction_date, license_plate, malfunction_cause) VALUES ('2019-10-16', 'у664он78', 'поломка аккумулятора');
+INSERT INTO bus_bd_schema.malfunctions (malfunction_date, license_plate, malfunction_cause) VALUES ('2019-10-28', 'б114де78', 'поломка аккумулятора');
+INSERT INTO bus_bd_schema.malfunctions (malfunction_date, license_plate, malfunction_cause) VALUES ('2019-11-10', 'а213бг78', 'поломка генератора  ');
+INSERT INTO bus_bd_schema.malfunctions (malfunction_date, license_plate, malfunction_cause) VALUES ('2019-11-29', 'а339ол78', 'поломка стартера    ');
+INSERT INTO bus_bd_schema.malfunctions (malfunction_date, license_plate, malfunction_cause) VALUES ('2019-12-18', 'у664он78', 'поломка аккумулятора');
 
 
 --
@@ -321,11 +321,11 @@ INSERT INTO bus_bd_schema.malfunctions (malfunction_date, bus_number, malfunctio
 -- Data for Name: routes; Type: TABLE DATA; Schema: bus_bd_schema; Owner: postgres
 --
 
-INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", length) VALUES (7, 'square              ', 'park                ', '06:10:00', '00:00:00', 8, 20);
-INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", length) VALUES (12, 'n street            ', 'square              ', '06:30:00', '00:00:00', 7, 15);
-INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", length) VALUES (124, 'beach               ', 'village             ', '07:00:00', '22:57:00', 27, 57);
-INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", length) VALUES (31, 'a station           ', 'c station           ', '06:30:00', '23:30:00', 10, 22);
-INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", length) VALUES (15, 'm street            ', 'a station           ', '06:20:00', '23:10:00', 12, 31);
+INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", route_length) VALUES (7, 'square              ', 'park                ', '06:10:00', '00:00:00', 8, 20);
+INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", route_length) VALUES (12, 'n street            ', 'square              ', '06:30:00', '00:00:00', 7, 15);
+INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", route_length) VALUES (124, 'beach               ', 'village             ', '07:00:00', '22:57:00', 27, 57);
+INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", route_length) VALUES (31, 'a station           ', 'c station           ', '06:30:00', '23:30:00', 10, 22);
+INSERT INTO bus_bd_schema.routes (route_number, start_point, end_point, start_time, end_time, "interval", route_length) VALUES (15, 'm street            ', 'a station           ', '06:20:00', '23:10:00', 12, 31);
 
 
 --
@@ -388,7 +388,7 @@ ALTER TABLE ONLY bus_bd_schema.bus_types
 --
 
 ALTER TABLE ONLY bus_bd_schema.buses
-    ADD CONSTRAINT buses_pkey PRIMARY KEY (bus_number);
+    ADD CONSTRAINT buses_pkey PRIMARY KEY (license_plate);
 
 
 --
@@ -415,7 +415,7 @@ ALTER TABLE ONLY bus_bd_schema.drivers
 --
 
 ALTER TABLE ONLY bus_bd_schema.malfunctions
-    ADD CONSTRAINT malfunctions_malfunction_date_bus_number_key UNIQUE (malfunction_date, bus_number);
+    ADD CONSTRAINT malfunctions_malfunction_date_bus_number_key UNIQUE (malfunction_date, license_plate);
 
 
 --
@@ -424,7 +424,7 @@ ALTER TABLE ONLY bus_bd_schema.malfunctions
 --
 
 ALTER TABLE ONLY bus_bd_schema.malfunctions
-    ADD CONSTRAINT malfunctions_pkey PRIMARY KEY (bus_number, malfunction_date);
+    ADD CONSTRAINT malfunctions_pkey PRIMARY KEY (license_plate, malfunction_date);
 
 
 --
@@ -505,7 +505,7 @@ ALTER TABLE ONLY bus_bd_schema.drivers
 --
 
 ALTER TABLE ONLY bus_bd_schema.malfunctions
-    ADD CONSTRAINT malfunctions_bus_number_fkey FOREIGN KEY (bus_number) REFERENCES bus_bd_schema.buses(bus_number);
+    ADD CONSTRAINT malfunctions_bus_number_fkey FOREIGN KEY (license_plate) REFERENCES bus_bd_schema.buses(license_plate);
 
 
 --
@@ -514,7 +514,7 @@ ALTER TABLE ONLY bus_bd_schema.malfunctions
 --
 
 ALTER TABLE ONLY bus_bd_schema.shift_journal
-    ADD CONSTRAINT shift_journal_bus_number_fkey FOREIGN KEY (bus_number) REFERENCES bus_bd_schema.buses(bus_number);
+    ADD CONSTRAINT shift_journal_bus_number_fkey FOREIGN KEY (bus_number) REFERENCES bus_bd_schema.buses(license_plate);
 
 
 --
@@ -535,7 +535,7 @@ ALTER TABLE ONLY bus_bd_schema.shift_journal
     ADD CONSTRAINT shift_journal_route_number_fkey FOREIGN KEY (route_number) REFERENCES bus_bd_schema.routes(route_number);
 
 
--- Completed on 2020-05-11 19:22:02
+-- Completed on 2020-06-05 23:39:48
 
 --
 -- PostgreSQL database dump complete
