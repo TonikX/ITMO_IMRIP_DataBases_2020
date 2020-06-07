@@ -1,0 +1,121 @@
+-- 1. Вывести по алфавиту список всех пациентов заданного врача с датами и стоимостью приемов.
+-- (Добавлена сортировка по убыванию)
+SELECT medfiles.client_name FROM "hospitalDB".medfiles 
+RIGHT JOIN "hospitalDB".consultation ON medfiles.client_id = consultation."med_id(FK)"
+RIGHT JOIN "hospitalDB".doctors ON consultation."cons_doc(FK)" = doctors.doc_id
+WHERE doctors.doc_name = 'Инга Игоревна Морозова' ORDER BY medfiles.client_name DESC
+
+-- 2. Вывести телефоны всех пациентах, которые посещали отоларингологов и год рождения которых меньше, чем 1987.
+SELECT medfiles.client_phone FROM "hospitalDB".medfiles
+RIGHT JOIN "hospitalDB".consultation ON medfiles.client_id = consultation."med_id(FK)"
+RIGHT JOIN "hospitalDB".doctors ON consultation."cons_doc(FK)" = doctors.doc_id
+WHERE doctors.doc_spec = 'Оториноларинголог' AND medfiles.client_birth < '1987-01-01'
+
+-- 3. Вывести список врачей, в графике которых среди рабочих дней имеется заданный
+SELECT doctors.doc_name FROM "hospitalDB".doctors
+RIGHT JOIN "hospitalDB".timetable ON doctors.doc_id = timetable."doc_id(FK)"
+WHERE timetable.weekday = '2020-05-07'
+
+-- 4. Количество приемов пациентов по датам (Добавлена сортировка по убыванию)
+SELECT consultation.cons_date, COUNT(consultation.cons_id) FROM "hospitalDB".consultation
+GROUP BY consultation.cons_date
+ORDER BY consultation.cons_date
+
+-- 5. Список пациентов, уже оплативших лечение (Добавлена сортировка по убыванию)
+SELECT medfiles.client_name FROM "hospitalDB".medfiles, "hospitalDB".consultation
+WHERE medfiles.client_id = consultation."med_id(FK)" AND consultation.pay_status = 'true'
+ORDER BY consultation.cons_date DESC
+
+-- 6. ФИО врачей и список принятых пациентов между 5 и 8 мая 2020 с указанием их диагноза,
+-- стоимости услуг и статуса оплаты с сортировкой по дате
+SELECT consultation.cons_date, doctors.doc_name, medfiles.client_name, diagnoses.diagn_name,
+price.price_val, consultation.pay_status FROM "hospitalDB".doctors
+RIGHT JOIN "hospitalDB".consultation ON doctors.doc_id = consultation."cons_doc(FK)"
+RIGHT JOIN "hospitalDB".medfiles ON medfiles.client_id = consultation."med_id(FK)"
+RIGHT JOIN "hospitalDB".diagnoses ON diagnoses.diagn_id = medfiles."client_diagn(FK)"
+RIGHT JOIN "hospitalDB".price ON price.price_id = consultation."price_id(FK)"
+WHERE consultation.cons_date BETWEEN '2020-05-05' AND '2020-05-08'
+ORDER BY consultation.cons_date
+
+-- 7. Возраст врачей, которые продолжают работать в клинике. Отсортировать по ФИО
+SELECT doctors.doc_name, AGE(CURRENT_DATE,doctors.doc_birth) AS "doc_age"
+FROM "hospitalDB".doctors WHERE doctors.doc_finish IS NULL ORDER BY doctors.doc_name
+
+
+-- 8. Количество оплаченных приемов, по кабинетам, где они проходили. Сортировка по номеру кабинета
+SELECT cabinets.cab_id, COUNT(consultation.pay_status) FROM "hospitalDB".cabinets, "hospitalDB".consultation
+WHERE consultation."cab_id(FK)" = cabinets.cab_id AND consultation.pay_status = 'true'
+GROUP BY cabinets.cab_id ORDER BY cabinets.cab_id
+
+-- 9. Способы лечения, которые был назначены более, чем 1 раз
+SELECT consultation.cons_treat, COUNT(consultation.cons_treat) FROM "hospitalDB".consultation
+GROUP BY consultation.cons_treat HAVING COUNT(consultation.cons_treat) > 1
+
+-- 10. Сколько дней прошло с консультации с сортировкой по дате консультации
+SELECT consultation.cons_date, (CURRENT_DATE - consultation.cons_date) AS "count days"
+FROM "hospitalDB".consultation ORDER BY consultation.cons_date
+
+-- 11. Имена пациентов, их диагнозы и симптомы, у которых в описании симптомов есть слово «кашель»
+SELECT medfiles.client_name, diagnoses.diagn_name, consultation.cons_status
+FROM "hospitalDB".diagnoses
+INNER JOIN "hospitalDB".medfiles ON medfiles."client_diagn(FK)" = diagnoses.diagn_id
+INNER JOIN "hospitalDB".consultation ON consultation."med_id(FK)" = medfiles.client_id
+WHERE consultation.cons_status LIKE '%Кашель%'
+
+-- 12. Информация о пациентах, которые были на приеме между 4 и 6 мая 2020
+SELECT * FROM "hospitalDB".medfiles
+WHERE medfiles.client_id = ANY(SELECT consultation."med_id(FK)" FROM "hospitalDB".consultation
+WHERE consultation.cons_date BETWEEN '2020-05-04' AND '2020-05-06')
+
+-- 13. Номера кабинетов, которые совпадают с расписанием
+SELECT "cab_id(FK)" FROM "hospitalDB".timetable UNION SELECT cab_id FROM "hospitalDB".cabinets
+ORDER BY "cab_id(FK)"
+
+-- 14. Табельный номер доктора, который не проводил приемы между 5 и 7 мая 2020
+SELECT doctors.doc_id FROM "hospitalDB".doctors EXCEPT SELECT consultation."cons_doc(FK)"
+FROM "hospitalDB".consultation WHERE consultation.cons_date BETWEEN '2020-05-06' AND '2020-05-07'
+
+-- 15. Название вуза, который окончили доктора, пациенты которых оплатили прием и
+-- общая сумма оплаченных приемов для этого вуза
+SELECT doctors.doc_edu, SUM(price.price_val) FROM "hospitalDB".doctors
+RIGHT JOIN "hospitalDB".consultation ON doctors.doc_id = consultation."cons_doc(FK)"
+RIGHT JOIN "hospitalDB".price ON consultation."price_id(FK)" = price.price_id
+WHERE consultation.pay_status = 'true' GROUP BY doctors.doc_edu
+
+-- 16. Номер и телефон кабинета, где проводили прием пациента с id = 201
+SELECT cab_id, cab_phone FROM "hospitalDB".cabinets
+WHERE cab_id = (SELECT "cab_id(FK)" FROM "hospitalDB".consultation WHERE "med_id(FK)" = '201') 
+
+-- 17. Имя пациентов, у которых врачом была женщина, и статус оплаты их приема.
+SELECT medfiles.client_name, CASE WHEN consultation.pay_status = 'true' THEN 'оплачено' ELSE 'неоплачено' END
+FROM "hospitalDB".medfiles
+INNER JOIN "hospitalDB".consultation ON medfiles.client_id = consultation."med_id(FK)"
+INNER JOIN "hospitalDB".doctors ON doctors.doc_id = consultation."cons_doc(FK)"
+WHERE doctors.doc_gender = 'жен'
+
+-- 18. Информация о всех пациентах женского пола, у которых поставлен диагноз – «Миопия»
+SELECT * FROM "hospitalDB".medfiles
+WHERE medfiles.client_gender = 'жен' AND medfiles."client_diagn(FK)" = (SELECT diagnoses.diagn_id
+																  FROM "hospitalDB".diagnoses
+																  WHERE diagnoses.diagn_name = 'Миопия')
+
+-- 19. Номер телефона и адрес пациента, который еще не оплатил прием
+SELECT medfiles.client_name, medfiles.client_phone, medfiles.client_adress FROM "hospitalDB".medfiles
+WHERE medfiles.client_id = ANY(SELECT consultation."med_id(FK)" FROM "hospitalDB".consultation
+							WHERE consultation.pay_status = 'false')
+							
+-- 20. Номера кабинетов и информация о выходных днях ответственных за кабинеты
+SELECT cabinets.cab_id, doctors.doc_name, timetable.day_of
+FROM "hospitalDB".doctors, "hospitalDB".cabinets, "hospitalDB".timetable
+WHERE doctors.doc_id = cabinets."cab_leader(FK)" AND timetable."doc_id(FK)" = doctors.doc_id
+ORDER BY cabinets.cab_id
+
+
+
+
+
+
+
+
+
+
