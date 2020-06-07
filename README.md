@@ -98,8 +98,12 @@
 ### Лекционная часть
 
 [Основы программирования. От языка программирования С к PHP.](https://youtu.be/CHs7AUo7pkw) (Видео)
+
 [Зачем изучать PHP: рейтинг, перспективы, сферы применения](https://ru.hexlet.io/blog/posts/zachem-izuchat-php-reyting-perspektivy-sfery-primeneniya) (Статья)
+
 [Для чего нужен PHP](https://youtu.be/KT2qb1yG58I) (Видео)
+
+[What is PHP? Why use it?](https://knowthecode.io/labs/php-101-gentle-introduction-wordpress-programming/episode-2) (Видео) [ENG]
 
 ### Практическая и лабораторная части
 
