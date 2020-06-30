@@ -70,6 +70,7 @@ SET default_with_oids = false;
 CREATE TABLE shemafinal.crew (
     id integer NOT NULL,
     crew_worker character varying
+    access integer
 );
 
 
@@ -88,8 +89,6 @@ CREATE TABLE shemafinal.flights (
     km_to_destination integer,
     departure_place character varying,
     destination_place character varying,
-    departure_date date,
-    arrival_date date,
     tickets_amount integer
 );
 
@@ -161,6 +160,26 @@ ALTER TABLE shemafinal.transits OWNER TO postgres;
 -- Data for Name: crew; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
 --
+-- Создание таблицы departure (вылеты)
+--
+
+CREATE TABLE shemafinal.departure (
+   id integer NOT NULL,
+   plane integer,
+   crew1 integer,
+   landing character varying,
+   departure_date date,
+   arrival_date date
+);
+
+ALTER TABLE shemafinal.transits OWNER TO postgres;
+
+--
+--
+-- TOC entry 3180 (class 0 OID 24667)
+-- Dependencies: 207
+-- Data for Name: departure; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
+--
 --Заполнение таблицы  экипаж (crew)
 --
 
@@ -185,7 +204,7 @@ INSERT INTO shemafinal.crew (id, crew_worker) VALUES (5, 'Rotov Arkady Konstanti
 -- Data for Name: h_resources; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
 --
--- Заполнение таблицы сотрудники (h_resouces)
+-- Заполнение таблицы сотрудники (h_resources)
 --
 
 INSERT INTO shemafinal.h_resources (id, name, "position", age, education, experience, passport) VALUES (1, 'Ivanov Ivan Ivanovich', 'pilot', 30, 'Saint Petersburg State University of Civil Aviation', '2 years as pilot', 1234567809);
@@ -272,7 +291,7 @@ ALTER TABLE ONLY shemafinal.transits
     ADD CONSTRAINT transits_pkey PRIMARY KEY (id_landing);
 
 
--- Completed on 2020-05-11 22:34:52 MSK
+-- Completed on 2020-06-30 15:25:34 MSK
 
 --
 -- PostgreSQL database dump complete
