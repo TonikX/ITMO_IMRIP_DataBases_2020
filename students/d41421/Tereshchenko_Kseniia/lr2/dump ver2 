@@ -5,7 +5,7 @@
 -- Dumped from database version 11.7
 -- Dumped by pg_dump version 11.7
 
--- Started on 2020-07-02 15:00:24 MSK
+-- Started on 2020-07-02 22:10:00 MSK
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -35,9 +35,6 @@ SET default_with_oids = false;
 --
 -- TOC entry 207 (class 1259 OID 24667)
 -- Name: crew; Type: TABLE; Schema: shemafinal; Owner: postgres
---
---
--- СОЗДАНИЕ ТАБЛИЦ
 --
 
 CREATE TABLE shemafinal.crew (
@@ -132,11 +129,9 @@ CREATE TABLE shemafinal.transits (
 ALTER TABLE shemafinal.transits OWNER TO postgres;
 
 --
--- TOC entry 3185 (class 0 OID 24667)
+-- TOC entry 3188 (class 0 OID 24667)
 -- Dependencies: 207
 -- Data for Name: crew; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
---
--- ЗАПОЛНЕНИЕ ТАБЛИЦ
 --
 
 INSERT INTO shemafinal.crew (id, crew_worker) VALUES (1, 'Ivanov Ivan Ivanovich');
@@ -147,7 +142,7 @@ INSERT INTO shemafinal.crew (id, crew_worker) VALUES (5, 'Rotov Arkady Konstanti
 
 
 --
--- TOC entry 3186 (class 0 OID 24675)
+-- TOC entry 3189 (class 0 OID 24675)
 -- Dependencies: 208
 -- Data for Name: departure; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
@@ -161,7 +156,7 @@ INSERT INTO shemafinal.departure (id, plane, crew1, landing, departure_date, arr
 
 
 --
--- TOC entry 3182 (class 0 OID 24630)
+-- TOC entry 3185 (class 0 OID 24630)
 -- Dependencies: 204
 -- Data for Name: flights; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
@@ -174,7 +169,7 @@ INSERT INTO shemafinal.flights (id, km_to_destination, departure_place, destinat
 
 
 --
--- TOC entry 3184 (class 0 OID 24659)
+-- TOC entry 3187 (class 0 OID 24659)
 -- Dependencies: 206
 -- Data for Name: h_resources; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
@@ -187,7 +182,7 @@ INSERT INTO shemafinal.h_resources (id, name, "position", age, education, experi
 
 
 --
--- TOC entry 3181 (class 0 OID 24622)
+-- TOC entry 3184 (class 0 OID 24622)
 -- Dependencies: 203
 -- Data for Name: planes; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
@@ -200,7 +195,7 @@ INSERT INTO shemafinal.planes (id, owner_name, type, speed, amount) VALUES (5, '
 
 
 --
--- TOC entry 3183 (class 0 OID 24651)
+-- TOC entry 3186 (class 0 OID 24651)
 -- Dependencies: 205
 -- Data for Name: transits; Type: TABLE DATA; Schema: shemafinal; Owner: postgres
 --
@@ -215,8 +210,6 @@ INSERT INTO shemafinal.transits (id_landing, id_flight, transit_place, transit_d
 --
 -- TOC entry 3059 (class 2606 OID 24674)
 -- Name: crew crew_pkey; Type: CONSTRAINT; Schema: shemafinal; Owner: postgres
---
--- ДОБАВЛЕНИЕ ГЛАВНЫХ КЛЮЧЕЙ
 --
 
 ALTER TABLE ONLY shemafinal.crew
@@ -259,7 +252,34 @@ ALTER TABLE ONLY shemafinal.transits
     ADD CONSTRAINT transits_pkey PRIMARY KEY (id_landing);
 
 
--- Completed on 2020-07-02 15:00:25 MSK
+--
+-- TOC entry 3061 (class 2606 OID 24704)
+-- Name: crew   crewfk; Type: FK CONSTRAINT; Schema: shemafinal; Owner: postgres
+--
+
+ALTER TABLE ONLY shemafinal.crew
+    ADD CONSTRAINT "  crewfk" FOREIGN KEY (id) REFERENCES shemafinal.h_resources(id) NOT VALID;
+
+
+--
+-- TOC entry 3062 (class 2606 OID 24723)
+-- Name: departure depfk; Type: FK CONSTRAINT; Schema: shemafinal; Owner: postgres
+--
+
+ALTER TABLE ONLY shemafinal.departure
+    ADD CONSTRAINT depfk FOREIGN KEY (plane) REFERENCES shemafinal.planes(id) NOT VALID;
+
+
+--
+-- TOC entry 3060 (class 2606 OID 24699)
+-- Name: flights idfk; Type: FK CONSTRAINT; Schema: shemafinal; Owner: postgres
+--
+
+ALTER TABLE ONLY shemafinal.flights
+    ADD CONSTRAINT idfk FOREIGN KEY (id) REFERENCES shemafinal.transits(id_landing) NOT VALID;
+
+
+-- Completed on 2020-07-02 22:10:01 MSK
 
 --
 -- PostgreSQL database dump complete
