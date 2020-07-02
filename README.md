@@ -95,6 +95,13 @@
 
 Создание интерфейсов к СУБД средствами php
 
+### Необходимо знать
+
+[Что такое клиентсерверная архитектура простым языком](https://habr.com/ru/post/495698/)
+[Что такое веб сервер простым языком](https://webkyrs.info/page/chto-takoe-veb-server-i-dlia-chego-on-nuzhen)
+[Что такое локальный сервер простым языком](https://ipipe.ru/info/dlja-chego-nuzhen-lokalnyj-server)
+
+
 ### Лекционная часть
 
 [Основы программирования. От языка программирования С к PHP.](https://youtu.be/CHs7AUo7pkw) (Видео)
