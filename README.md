@@ -120,6 +120,8 @@
 
 **[Часть2](https://drive.google.com/open?id=1qw1D7WwH8JKzDKOaFatyiAaUbsMTmB_w)**
 
+**[Дополнительный контет по работе с БД](https://www.youtube.com/playlist?list=PLUY1lsOTtPeJbufBKuRyMS6-ByqvtP1PE)**
+
 
 ### Сдача работы №4
 **Часть1**
