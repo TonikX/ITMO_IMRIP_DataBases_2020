@@ -8,7 +8,7 @@
 		<h3>Введите ID собаки, информацию о котором нужно удалить</h3>
 		<ul>
 			<form name="delete" action="delete.php" method="POST" >
-				<ul>ID собаки:</ul><ul><input type="int" name="doc_id"/></ul>
+				<ul>ID собаки:</ul><ul><input type="int" name="ID_dog"/></ul>
 				<br/>
 				<ul><input type="submit" name="Delete" /></ul>
 			</form>
@@ -26,7 +26,7 @@
 
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				if (isset($_POST["Delete"])) {
-						$sql = "delete from $table where \"ID_dog\"='$_POST[doc_id]'";
+						$sql = "delete from $table where \"ID_dog\"='$_POST[ID_dog]'";
 						$result = pg_query($db, $sql);
 						$result = pg_fetch_all($result);
 						pg_close($db);
