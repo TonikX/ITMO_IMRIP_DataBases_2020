@@ -1,0 +1,15 @@
+body {
+    padding: 15px;
+}
+
+.table th {
+    text-align: left;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+form {
+    margin-block-end: 0;
+}
